@@ -3,84 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?</title>
+    <title>Valentine's Surprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-body {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    padding: 50px;
-    background: linear-gradient(to bottom, #d3d3d3, #808080);
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-h1 {
-    font-size: 28px;
-    padding: 10px;
-}
-
-/* Button Styling */
-.btn {
-    padding: 15px 30px;
-    font-size: 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #ff4d4d;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 10px;
-    transition: 0.3s;
-    width: 200px; /* Ensures good size on mobile */
-    max-width: 80%;
-    text-align: center;
-}
-
-.btn:hover {
-    background-color: #cc0000;
-}
-
-/* "No" Button: Mobile Fix */
-#no {
-    position: absolute;
-}
-
-/* Make sure content doesn't overflow on smaller screens */
-@media screen and (max-width: 600px) {
-    body {
-        padding: 20px;
-    }
-    h1 {
-        font-size: 24px;
-    }
-    .btn {
-        font-size: 18px;
-        padding: 12px 20px;
-    }
-}
-
-    </style>
-</head>
-<body>
-    <h1>Will you be my Valentine? ❤️</h1>
-    <button class="btn" onclick="yesAnswer()">Yes</button>
-    <button class="btn" id="no" onmouseover="moveButton()">No</button>
-
-    <script>
-        function yesAnswer() {
-            alert("YIPPIE!!! SELEBRACHEN!!!");
+        /* Background with a pixelated pattern */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: repeating-linear-gradient(
+                45deg,
+                #4b0082,
+                #4b0082 10px,
+                #6a1b9a 10px,
+                #6a1b9a 20px
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'VT323', monospace;
+            overflow: hidden;
+            position: relative;
         }
         
-        function moveButton() {
-            let x = Math.random() * window.innerWidth - 100;
-            let y = Math.random() * window.innerHeight - 50;
-            document.getElementById("no").style.left = x + "px";
-            document.getElementById("no").style.top = y + "px";
+        /* Apply the font to all elements */
+        * {
+            font-family: 'VT323', monospace !important;
         }
+        
+        /* Unified container for title bar and window */
+        .window-container {
+            width: 500px;
+            background: #e6e6fa;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 4px solid #4b0082;
+        }
+        
+        /* Window title bar mimicking old Windows style */
+        .title-bar {
+            background: #4b0082;
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .close, .minimize, .maximize {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .close { background: red; }
+        .minimize { background: yellow; }
+        .maximize { background: green; }
+
+        /* Window content */
+        .window {
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* GIF input */
+        .gif-container {
+            margin: 15px 0;
+        }
+        .gif-container img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        /* Button with a bouncy click effect */
+        .action-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #6a1b9a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .action-button:active {
+            transform: scale(0.9) translateY(2px);
+        }
+
+        /* Button text animation on click */
+        .action-button span {
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Reaction buttons - properly hidden until activated with animation */
+        .reaction-buttons {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            justify-content: center;
+            gap: 40px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .reaction-button {
+            font-size: 32px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .reaction-button:active {
+            transform: scale(0.9) translateY(2px);
+        }
+
+        /* Pop-up message styling */
+        .popup-message {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        /* Full-screen red flash effect */
+        .screen-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.7);
+            z-index: 9999;
+            animation: flash 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const button = document.querySelector(".action-button");
+            const textSpan = button.querySelector("span");
+            const reactionButtons = document.querySelector(".reaction-buttons");
+            const popup = document.querySelector(".popup-message");
+            const thumbsDown = document.querySelector(".reaction-buttons button:nth-child(2)");
+
+            let clickedOnce = false;
+            let warningShown = false;
+
+            button.addEventListener("click", function() {
+                textSpan.style.opacity = "1";
+                
+                if (!clickedOnce) {
+                    reactionButtons.style.display = "flex";
+                    setTimeout(() => {
+                        reactionButtons.style.opacity = "1";
+                    }, 50);
+                    clickedOnce = true;
+                } else {
+                    // Show warning if button is clicked again without a reaction choice
+                    if (!warningShown) {
+                        warningShown = true;
+                        popup.textContent = "Hey, you have to click a choice at the bottom, silly.";
+                        setTimeout(() => {
+                            popup.style.transform = "translateX(-50%) translateY(50px)";
+                            popup.style.opacity = "1";
+                        }, 500);
+
+                        setTimeout(() => {
+                            popup.style.transform = "translateX(-50%) translateY(-50px)";
+                            popup.style.opacity = "0";
+                            warningShown = false;
+                        }, 3500);
+                    }
+                }
+            });
+
+            // Handle thumbs-down button click
+            thumbsDown.addEventListener("click", function() {
+                // Create red screen flash
+                const flash = document.createElement("div");
+                flash.classList.add("screen-flash");
+                document.body.appendChild(flash);
+
+                // Change popup text to "WRONG CHOICE."
+                popup.textContent = "WRONG CHOICE.";
+                popup.style.transform = "translateX(-50%) translateY(50px)";
+                popup.style.opacity = "1";
+
+                setTimeout(() => {
+                    flash.remove();
+                    popup.style.transform = "translateX(-50%) translateY(-50px)";
+                    popup.style.opacity = "0";
+                }, 300);
+
+                // Play error sound
+                const errorSound = new Audio("https://www.myinstants.com/media/sounds/windows-error-sound.mp3");
+                errorSound.play();
+            });
+        });
     </script>
+</head>
+<body>
+    <!-- Pop-up Message -->
+    <div class="popup-message">Hey, you have to click a choice at the bottom, silly.</div>
+
+    <div class="window-container">
+        <div class="title-bar">
+            Valentine.exe
+            <div class="buttons">
+                <div class="close"></div>
+                <div class="minimize"></div>
+                <div class="maximize"></div>
+            </div>
+        </div>
+        <div class="window">
+            <div class="gif-container">
+                <img id="gif" src="https://i.pinimg.com/originals/d9/b2/9f/d9b29fdd541404f5df42c52362dca5bf.gif" alt="Your GIF here">
+            </div>
+            <button class="action-button"><span>Are you sure you're in the right place?</span></button>
+        </div>
+    </div>
+    
+    <div class="reaction-buttons">
+        <button class="reaction-button">👍</button>
+        <button class="reaction-button">👎</button>
+    </div>
 </body>
 </html>
