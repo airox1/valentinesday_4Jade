@@ -1,263 +1,709 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Valentine's Surprise</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        /* Background with a pixelated pattern */
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            background: repeating-linear-gradient(
-                45deg,
-                #4b0082,
-                #4b0082 10px,
-                #6a1b9a 10px,
-                #6a1b9a 20px
-            );
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-family: 'VT323', monospace;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        /* Apply the font to all elements */
-        * {
-            font-family: 'VT323', monospace !important;
-        }
-        
-        /* Unified container for title bar and window */
-        .window-container {
-            width: 500px;
-            background: #e6e6fa;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 4px solid #4b0082;
-        }
-        
-        /* Window title bar mimicking old Windows style */
-        .title-bar {
-            background: #4b0082;
-            padding: 15px;
-            color: white;
-            font-weight: bold;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 18px;
-        }
-        
-        .buttons {
-            display: flex;
-            gap: 5px;
-        }
+      /* Background with a pixelated pattern */
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background: repeating-linear-gradient(
+          45deg,
+          #4b0082,
+          #4b0082 10px,
+          #6a1b9a 10px,
+          #6a1b9a 20px
+        );
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: 'VT323', monospace;
+        overflow: hidden;
+        position: relative;
+      }
 
-        .close, .minimize, .maximize {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+      /* Apply the font to all elements */
+      * {
+        font-family: 'VT323', monospace !important;
+      }
 
-        .close { background: red; }
-        .minimize { background: yellow; }
-        .maximize { background: green; }
+      /* Unified container for title bar and window */
+      .window-container {
+        width: 500px;
+        background: #e6e6fa;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 4px solid #4b0082;
+        position: relative;
+      }
 
-        /* Window content */
-        .window {
-            text-align: center;
-            padding: 20px;
-        }
+      /* Window title bar mimicking old Windows style */
+      .title-bar {
+        background: #4b0082;
+        padding: 15px;
+        color: white;
+        font-weight: bold;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+      }
 
-        /* GIF input */
-        .gif-container {
-            margin: 15px 0;
-        }
-        .gif-container img {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
+      .buttons {
+        display: flex;
+        gap: 5px;
+      }
 
-        /* Button with a bouncy click effect */
-        .action-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background: #6a1b9a;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-        }
+      .close,
+      .minimize,
+      .maximize {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: inline-block;
+      }
 
-        .action-button:active {
-            transform: scale(0.9) translateY(2px);
-        }
+      .close {
+        background: red;
+      }
+      .minimize {
+        background: yellow;
+      }
+      .maximize {
+        background: green;
+      }
 
-        /* Button text animation on click */
-        .action-button span {
-            display: inline-block;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
+      /* Window content */
+      .window {
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
 
-        /* Reaction buttons - properly hidden until activated with animation */
-        .reaction-buttons {
-            display: none;
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            justify-content: center;
-            gap: 40px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
+      /* GIF input */
+      .gif-container {
+        margin: 15px 0;
+      }
+      .gif-container img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
 
-        .reaction-button {
-            font-size: 32px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+      /* Button with a bouncy click effect */
+      .action-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background: #6a1b9a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+      }
+      .action-button:active {
+        transform: scale(0.9) translateY(2px);
+      }
+      .action-button span {
+        display: inline-block;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
 
-        .reaction-button:active {
-            transform: scale(0.9) translateY(2px);
-        }
+      /* Reaction buttons styling */
+      .reaction-buttons {
+        display: none;
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        justify-content: center;
+        gap: 40px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .reaction-button {
+        font-size: 32px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .reaction-button:active {
+        transform: scale(0.9) translateY(2px);
+      }
 
-        /* Pop-up message styling */
-        .popup-message {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 0, 0, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 18px;
-            opacity: 0;
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        }
+      /* Pop-up message styling */
+      .popup-message {
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 0, 0, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 18px;
+        opacity: 0;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
 
-        /* Full-screen red flash effect */
-        .screen-flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 0, 0, 0.7);
-            z-index: 9999;
-            animation: flash 0.3s ease-in-out;
-            pointer-events: none;
+      /* Full-screen flash effect */
+      .screen-flash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        animation: flash 0.3s ease-in-out;
+        pointer-events: none;
+      }
+      .screen-flash.red {
+        background: rgba(255, 0, 0, 0.7);
+      }
+      .screen-flash.green {
+        background: rgba(0, 255, 0, 0.7);
+      }
+      .screen-flash.grey {
+        background: rgba(128, 128, 128, 0.7);
+      }
+      @keyframes flash {
+        0% {
+          opacity: 1;
         }
+        100% {
+          opacity: 0;
+        }
+      }
 
-        @keyframes flash {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+      .flashing-text {
+        font-size: 24px;
+        color: red;
+        font-weight: bold;
+        animation: flashText 1s infinite;
+        margin-top: 20px;
+      }
+      @keyframes flashText {
+        0%,
+        100% {
+          opacity: 1;
         }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* Keypad styling */
+      .keypad {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .keypad-display {
+        width: 100%;
+        padding: 10px;
+        background: #fff;
+        border: 2px solid #4b0082;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 10px;
+        pointer-events: none;
+      }
+      .keypad-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .keypad-button {
+        padding: 15px;
+        font-size: 24px;
+        background: #6a1b9a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .keypad-button:active {
+        transform: scale(0.9) translateY(2px);
+      }
+      .keypad-button.zero {
+        grid-column: 2 / 3;
+      }
+      .keypad-button.backspace {
+        grid-column: 3 / 4;
+        background: #ff0000;
+      }
+      .keypad-button.submit {
+        grid-column: 1 / 2;
+        background: #00ff00;
+      }
+
+      .password-prompt {
+        font-size: 20px;
+        color: #4b0082;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .password-hint {
+        font-size: 16px;
+        color: #4b0082;
+        margin-bottom: 15px;
+      }
+      .typewriter-text {
+        font-size: 18px;
+        color: #4b0082;
+        font-weight: bold;
+        margin-top: 20px;
+        white-space: pre-wrap;
+        overflow: hidden;
+      }
+
+      /* Rocket animation styling, slowed further to 6s */
+      .rocket-emoji {
+        position: absolute;
+        top: 50%;
+        left: -50px;
+        font-size: 32px;
+        transform: rotate(45deg);
+        animation: rocket 6s linear forwards;
+        cursor: pointer;
+      }
+      @keyframes rocket {
+        0% {
+          left: -50px;
+          top: 50%;
+        }
+        100% {
+          left: 100%;
+          top: -50px;
+        }
+      }
+
+      /* Styling for final valentine message */
+      .final-message {
+        font-size: 48px;
+        color: #4b0082;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      /* Shake animation keyframes */
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        50% {
+          transform: translateX(5px);
+        }
+        75% {
+          transform: translateX(-5px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
     </style>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const button = document.querySelector(".action-button");
-            const textSpan = button.querySelector("span");
-            const reactionButtons = document.querySelector(".reaction-buttons");
-            const popup = document.querySelector(".popup-message");
-            const thumbsDown = document.querySelector(".reaction-buttons button:nth-child(2)");
+      document.addEventListener("DOMContentLoaded", function() {
+        const button = document.querySelector(".action-button");
+        const textSpan = button.querySelector("span");
+        const reactionButtons = document.querySelector(".reaction-buttons");
+        const popup = document.querySelector(".popup-message");
+        const thumbsUp = document.querySelector(".reaction-buttons button:nth-child(1)");
+        const thumbsDown = document.querySelector(".reaction-buttons button:nth-child(2)");
+        const gif = document.getElementById("gif");
+        const windowElement = document.querySelector(".window");
 
-            let clickedOnce = false;
-            let warningShown = false;
+        let clickedOnce = false;
+        let warningShown = false;
+        let thumbsUpCount = 0;
 
-            button.addEventListener("click", function() {
-                textSpan.style.opacity = "1";
-                
-                if (!clickedOnce) {
-                    reactionButtons.style.display = "flex";
-                    setTimeout(() => {
-                        reactionButtons.style.opacity = "1";
-                    }, 50);
-                    clickedOnce = true;
-                } else {
-                    // Show warning if button is clicked again without a reaction choice
-                    if (!warningShown) {
-                        warningShown = true;
-                        popup.textContent = "Hey, you have to click a choice at the bottom, silly.";
-                        setTimeout(() => {
-                            popup.style.transform = "translateX(-50%) translateY(50px)";
-                            popup.style.opacity = "1";
-                        }, 500);
+        button.addEventListener("click", function() {
+          textSpan.style.opacity = "1";
 
-                        setTimeout(() => {
-                            popup.style.transform = "translateX(-50%) translateY(-50px)";
-                            popup.style.opacity = "0";
-                            warningShown = false;
-                        }, 3500);
-                    }
-                }
-            });
-
-            // Handle thumbs-down button click
-            thumbsDown.addEventListener("click", function() {
-                // Create red screen flash
-                const flash = document.createElement("div");
-                flash.classList.add("screen-flash");
-                document.body.appendChild(flash);
-
-                // Change popup text to "WRONG CHOICE."
-                popup.textContent = "WRONG CHOICE.";
+          if (!clickedOnce) {
+            reactionButtons.style.display = "flex";
+            setTimeout(() => {
+              reactionButtons.style.opacity = "1";
+            }, 50);
+            clickedOnce = true;
+          } else {
+            if (!warningShown) {
+              warningShown = true;
+              popup.textContent = "Hey, you have to click a choice at the bottom, silly.";
+              setTimeout(() => {
                 popup.style.transform = "translateX(-50%) translateY(50px)";
                 popup.style.opacity = "1";
-
-                setTimeout(() => {
-                    flash.remove();
-                    popup.style.transform = "translateX(-50%) translateY(-50px)";
-                    popup.style.opacity = "0";
-                }, 300);
-
-                // Play error sound
-                const errorSound = new Audio("https://www.myinstants.com/media/sounds/windows-error-sound.mp3");
-                errorSound.play();
-            });
+              }, 500);
+              setTimeout(() => {
+                popup.style.transform = "translateX(-50%) translateY(-50px)";
+                popup.style.opacity = "0";
+                warningShown = false;
+              }, 3500);
+            }
+          }
         });
+
+        thumbsDown.addEventListener("click", function() {
+          const flash = document.createElement("div");
+          flash.classList.add("screen-flash", "red");
+          document.body.appendChild(flash);
+
+          popup.textContent = "WRONG CHOICE.";
+          popup.style.transform = "translateX(-50%) translateY(50px)";
+          popup.style.opacity = "1";
+
+          setTimeout(() => {
+            flash.remove();
+            popup.style.transform = "translateX(-50%) translateY(-50px)";
+            popup.style.opacity = "0";
+          }, 300);
+
+          const errorSound = new Audio(
+            "https://www.myinstants.com/media/sounds/windows-error-sound.mp3"
+          );
+          errorSound.play();
+        });
+
+        thumbsUp.addEventListener("click", function() {
+          const flash = document.createElement("div");
+          flash.classList.add("screen-flash", "green");
+          document.body.appendChild(flash);
+
+          setTimeout(() => {
+            flash.remove();
+          }, 300);
+
+          const dingSound = new Audio(
+            "https://www.myinstants.com/media/sounds/ding-sound-effect_2.mp3"
+          );
+          dingSound.play();
+
+          thumbsUpCount++;
+
+          if (thumbsUpCount === 10) {
+            gif.src =
+              "https://i.pinimg.com/originals/0d/c4/b3/0dc4b38ee54a0169f5730bcbe4f94d3a.gif";
+            reactionButtons.remove();
+            button.remove();
+
+            const flashingText = document.createElement("div");
+            flashingText.classList.add("flashing-text");
+            flashingText.textContent = "ALRIGHT ALRIGHT, I GOT THE MESSAGE...";
+            windowElement.appendChild(flashingText);
+
+            setTimeout(() => {
+              gif.remove();
+              flashingText.remove();
+
+              const passwordPrompt = document.createElement("div");
+              passwordPrompt.classList.add("password-prompt");
+              passwordPrompt.textContent = "Enter our password.";
+              windowElement.appendChild(passwordPrompt);
+
+              const passwordHint = document.createElement("div");
+              passwordHint.classList.add("password-hint");
+              passwordHint.textContent = "Hint: a date";
+              windowElement.appendChild(passwordHint);
+
+              const keypad = document.createElement("div");
+              keypad.classList.add("keypad");
+
+              const keypadDisplay = document.createElement("div");
+              keypadDisplay.classList.add("keypad-display");
+              keypadDisplay.id = "keypad-display";
+              keypad.appendChild(keypadDisplay);
+
+              const keypadButtons = document.createElement("div");
+              keypadButtons.classList.add("keypad-buttons");
+              const buttonValues = [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "Enter",
+                "0",
+                "⌫"
+              ];
+
+              buttonValues.forEach((value) => {
+                const keypadButton = document.createElement("button");
+                keypadButton.classList.add("keypad-button");
+                if (value === "0") keypadButton.classList.add("zero");
+                if (value === "⌫") keypadButton.classList.add("backspace");
+                if (value === "Enter") keypadButton.classList.add("submit");
+                keypadButton.textContent = value;
+                keypadButton.addEventListener("click", function () {
+                  if (value === "⌫") {
+                    keypadDisplay.textContent = keypadDisplay.textContent.slice(0, -1);
+                  } else if (value === "Enter") {
+                    const input = keypadDisplay.textContent;
+                    if (input === "122222") {
+                      const flash = document.createElement("div");
+                      flash.classList.add("screen-flash", "green");
+                      document.body.appendChild(flash);
+                      setTimeout(() => flash.remove(), 300);
+
+                      const dingSound = new Audio(
+                        "https://www.myinstants.com/media/sounds/ding-sound-effect_2.mp3"
+                      );
+                      dingSound.play();
+
+                      windowElement.innerHTML = "";
+
+                      // Typewriter effect with final rocket sequence
+                      const newGifContainer = document.createElement("div");
+                      newGifContainer.classList.add("gif-container");
+                      const newGif = document.createElement("img");
+                      newGif.src =
+                        "https://i.pinimg.com/originals/48/a2/69/48a2696280a0d19488e41ab600b71367.gif";
+                      newGifContainer.appendChild(newGif);
+                      windowElement.appendChild(newGifContainer);
+
+                      setTimeout(() => {
+                        const typewriterText = document.createElement("div");
+                        typewriterText.classList.add("typewriter-text");
+                        windowElement.appendChild(typewriterText);
+                        const text =
+                          "I'm glad it's really you, Jade! Listen... I know we've had our rough patches, but I am so glad that we've been able to work it out. I love you so much, and I always will. With that being said...";
+                        let index = 0;
+                        const typingSpeed = 85;
+                        const pauseDurations = {
+                          "Jade!": 1000,
+                          "Listen...": 1000,
+                          "will.": 1000,
+                          "said...": 1000
+                        };
+                        const pausePoints = Object.keys(pauseDurations);
+                        function typeWriter() {
+                          if (index < text.length) {
+                            typewriterText.textContent += text.charAt(index);
+                            index++;
+                            const currentText = typewriterText.textContent;
+                            const pausePoint = pausePoints.find((point) =>
+                              currentText.endsWith(point)
+                            );
+                            if (pausePoint) {
+                              setTimeout(typeWriter, pauseDurations[pausePoint]);
+                            } else {
+                              setTimeout(typeWriter, typingSpeed);
+                            }
+                          } else {
+                            setTimeout(() => {
+                              const rocketEmoji = document.createElement("div");
+                              rocketEmoji.classList.add("rocket-emoji");
+                              rocketEmoji.textContent = "🚀";
+                              document.body.appendChild(rocketEmoji);
+
+                              rocketEmoji.addEventListener("click", function () {
+                                const explosionSound = new Audio(
+                                  "https://www.myinstants.com/en/instant/old-minecraft-explosion/?utm_source=copy&utm_medium=share"
+                                );
+                                explosionSound.volume = 0.7;
+                                explosionSound.play();
+
+                                const flash = document.createElement("div");
+                                flash.classList.add("screen-flash", "grey");
+                                document.body.appendChild(flash);
+                                setTimeout(() => flash.remove(), 300);
+
+                                const windowContainer = document.querySelector(".window-container");
+                                windowContainer.innerHTML = "";
+
+                                const finalContainer = document.createElement("div");
+                                finalContainer.style.padding = "20px";
+                                finalContainer.style.display = "flex";
+                                finalContainer.style.flexDirection = "column";
+                                finalContainer.style.alignItems = "center";
+
+                                const finalMessage = document.createElement("div");
+                                finalMessage.classList.add("final-message");
+                                finalMessage.textContent = "Will you be my valentine?";
+                                finalMessage.style.marginBottom = "20px";
+                                finalContainer.appendChild(finalMessage);
+
+                                const finalGifContainer = document.createElement("div");
+                                finalGifContainer.classList.add("gif-container");
+                                const finalGif = document.createElement("img");
+                                // Use the specified gif for the final screen.
+                                finalGif.src =
+                                  "https://i.pinimg.com/originals/09/cb/16/09cb169942c1647ff7707910a0eef733.gif";
+                                finalGifContainer.appendChild(finalGif);
+                                finalContainer.appendChild(finalGifContainer);
+
+                                // Create container for final thumbs up and thumbs down buttons
+                                const buttonsContainer = document.createElement("div");
+                                buttonsContainer.style.display = "flex";
+                                buttonsContainer.style.gap = "20px";
+                                buttonsContainer.style.marginTop = "20px";
+
+                                // Final thumbs up button with new functionality after rocket press
+                                const finalThumbsUp = document.createElement("button");
+                                finalThumbsUp.textContent = "👍";
+                                finalThumbsUp.style.background = "transparent";
+                                finalThumbsUp.style.border = "none";
+                                finalThumbsUp.style.fontSize = "32px";
+                                finalThumbsUp.style.cursor = "pointer";
+                                finalThumbsUp.addEventListener("click", function () {
+                                  // Flash green and play ding sound
+                                  const flash = document.createElement("div");
+                                  flash.classList.add("screen-flash", "green");
+                                  document.body.appendChild(flash);
+                                  setTimeout(() => flash.remove(), 300);
+                                  const dingSound = new Audio(
+                                    "https://www.myinstants.com/media/sounds/ding-sound-effect_2.mp3"
+                                  );
+                                  dingSound.play();
+                                  // Remove the old gif container and show the new one with text "YAY!"
+                                  if (finalGifContainer && finalGifContainer.parentNode) {
+                                    finalGifContainer.remove();
+                                  }
+                                  const newFinalGifContainer = document.createElement("div");
+                                  newFinalGifContainer.classList.add("gif-container");
+                                  const yayText = document.createElement("div");
+                                  yayText.style.fontSize = "32px";
+                                  yayText.style.color = "#4b0082";
+                                  yayText.textContent = "YAY!";
+                                  newFinalGifContainer.appendChild(yayText);
+                                  finalContainer.appendChild(newFinalGifContainer);
+                                });
+
+                                // Final thumbs down button remains the same
+                                const finalThumbsDown = document.createElement("button");
+                                finalThumbsDown.textContent = "👎";
+                                finalThumbsDown.style.background = "transparent";
+                                finalThumbsDown.style.border = "none";
+                                finalThumbsDown.style.fontSize = "32px";
+                                finalThumbsDown.style.cursor = "pointer";
+                                finalThumbsDown.addEventListener("click", function () {
+                                  const flash = document.createElement("div");
+                                  flash.classList.add("screen-flash", "red");
+                                  document.body.appendChild(flash);
+                                  setTimeout(() => flash.remove(), 300);
+                                  const errorSound = new Audio(
+                                    "https://www.myinstants.com/media/sounds/windows-error-sound.mp3"
+                                  );
+                                  errorSound.play();
+                                  const initialPopup = document.createElement("div");
+                                  initialPopup.classList.add("popup-message");
+                                  initialPopup.textContent =
+                                    "Hey, you have to click a choice at the bottom, silly.";
+                                  initialPopup.style.transform =
+                                    "translateX(-50%) translateY(50px)";
+                                  initialPopup.style.opacity = "1";
+                                  document.body.appendChild(initialPopup);
+                                  setTimeout(() => {
+                                    initialPopup.style.transform =
+                                      "translateX(-50%) translateY(-50px)";
+                                    initialPopup.style.opacity = "0";
+                                    setTimeout(() => {
+                                      initialPopup.remove();
+                                    }, 500);
+                                  }, 3000);
+                                  finalThumbsDown.style.animation = "shake 0.3s";
+                                  finalThumbsDown.addEventListener(
+                                    "animationend",
+                                    function () {
+                                      finalThumbsDown.style.animation = "";
+                                    },
+                                    { once: true }
+                                  );
+                                });
+
+                                buttonsContainer.appendChild(finalThumbsUp);
+                                buttonsContainer.appendChild(finalThumbsDown);
+                                finalContainer.appendChild(buttonsContainer);
+
+                                windowContainer.appendChild(finalContainer);
+                              });
+                            }, 1000);
+                          }
+                        }
+                        typeWriter();
+                      }, 500);
+                    } else {
+                      const flash = document.createElement("div");
+                      flash.classList.add("screen-flash", "red");
+                      document.body.appendChild(flash);
+                      setTimeout(() => flash.remove(), 300);
+                      const errorSound = new Audio(
+                        "https://www.myinstants.com/media/sounds/windows-error-sound.mp3"
+                      );
+                      errorSound.play();
+                    }
+                  } else {
+                    keypadDisplay.textContent += value;
+                  }
+                });
+                keypadButtons.appendChild(keypadButton);
+              });
+
+              keypad.appendChild(keypadButtons);
+              windowElement.appendChild(keypad);
+              keypad.style.display = "flex";
+            }, 5000);
+          }
+        });
+      });
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Pop-up Message -->
-    <div class="popup-message">Hey, you have to click a choice at the bottom, silly.</div>
+    <div class="popup-message">
+      Hey, you have to click a choice at the bottom, silly.
+    </div>
 
     <div class="window-container">
-        <div class="title-bar">
-            Valentine.exe
-            <div class="buttons">
-                <div class="close"></div>
-                <div class="minimize"></div>
-                <div class="maximize"></div>
-            </div>
+      <div class="title-bar">
+        Valentine.exe
+        <div class="buttons">
+          <div class="close"></div>
+          <div class="minimize"></div>
+          <div class="maximize"></div>
         </div>
-        <div class="window">
-            <div class="gif-container">
-                <img id="gif" src="https://i.pinimg.com/originals/d9/b2/9f/d9b29fdd541404f5df42c52362dca5bf.gif" alt="Your GIF here">
-            </div>
-            <button class="action-button"><span>Are you sure you're in the right place?</span></button>
+      </div>
+      <div class="window">
+        <div class="gif-container">
+          <img
+            id="gif"
+            src="https://i.pinimg.com/originals/d9/b2/9f/d9b29fdd541404f5df42c52362dca5bf.gif"
+            alt="Your GIF here"
+          />
         </div>
+        <button class="action-button">
+          <span>Are you sure you're in the right place?</span>
+        </button>
+      </div>
     </div>
-    
+
     <div class="reaction-buttons">
-        <button class="reaction-button">👍</button>
-        <button class="reaction-button">👎</button>
+      <button class="reaction-button">👍</button>
+      <button class="reaction-button">👎</button>
     </div>
-</body>
+  </body>
 </html>
